@@ -1,0 +1,4 @@
+amount,mode,reference_id,payment_date
+500,UPI,UPI123456,2026-07-20
+1200,cash,,2026-07-21
+750,UPI,UPI789012,2026-07-22
