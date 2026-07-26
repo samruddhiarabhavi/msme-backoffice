@@ -7,6 +7,17 @@ const { insertPayment } = require('../db/paymentsModel'); // yahan add karo
 
 const upload = multer({ dest: 'uploads/' });
 const { detectMismatches, getPaymentsSummary } = require('../db/reconciliationModel');
+const { runReconciliation } = require('../services/reconciliationAgent');
+
+router.get('/run-agent-reconcile', async (req, res) => {
+  try {
+    const result = await runReconciliation(1);
+    res.json(result);
+  } catch (err) {
+    console.error('Agent error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.get('/test-reconcile', async (req, res) => {
   const mismatches = await detectMismatches(1); // businessId = 1

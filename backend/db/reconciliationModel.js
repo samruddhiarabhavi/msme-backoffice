@@ -1,6 +1,7 @@
 
 const pool = require('./connection');
 
+
 async function getPaymentsSummary(businessId) {
   const [rows] = await pool.query(
     `SELECT mode, COUNT(*) as count, SUM(amount) as total 
