@@ -6,6 +6,13 @@ const fs = require('fs');
 const { insertPayment } = require('../db/paymentsModel'); // yahan add karo
 
 const upload = multer({ dest: 'uploads/' });
+const { detectMismatches, getPaymentsSummary } = require('../db/reconciliationModel');
+
+router.get('/test-reconcile', async (req, res) => {
+  const mismatches = await detectMismatches(1); // businessId = 1
+  const summary = await getPaymentsSummary(1);
+  res.json({ mismatches, summary });
+});
 
 router.post('/upload-csv', upload.single('file'), async (req, res) => {
   const results = [];
