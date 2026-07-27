@@ -1,38 +1,239 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --ink: #1F2D50;
+  --paper: #F2EFE6;
+  --paper-dark: #E5E0D2;
+  --stamp-red: #C1272D;
+  --currency-green: #2F6F5E;
+  --brass: #C99A3C;
+  --text-muted: #6B6558;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.ledger-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 28px 32px;
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 4px solid var(--brass);
+}
+
+.ledger-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.ledger-header .tagline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--brass);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+/* Receipt-slip upload section */
+.receipt-slip {
+  background: white;
+  border: 1px solid var(--paper-dark);
+  border-radius: 4px;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 2px 0 var(--paper-dark);
+  margin-bottom: 32px;
+}
+
+.receipt-slip::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--paper) 0px, var(--paper) 6px,
+    transparent 6px, transparent 12px
+  );
+}
+
+.receipt-slip h2 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin: 6px 0 16px;
+}
+
+.file-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+input[type="file"] {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.btn-stamp {
+  background: var(--stamp-red);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn-stamp:hover {
+  transform: translateY(-1px);
+}
+
+.upload-message {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  margin-top: 12px;
+  color: var(--currency-green);
+}
+
+/* Dashboard ledger cards */
+.ledger-cards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.ledger-card {
+  background: white;
+  flex: 1;
+  min-width: 200px;
+  border-radius: 4px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 2px 0 var(--paper-dark);
+  overflow: hidden;
+}
+
+.ledger-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--paper) 0px, var(--paper) 5px,
+    transparent 5px, transparent 10px
+  );
+}
+
+.ledger-card .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin: 8px 0 8px;
+}
+
+.ledger-card .value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.ledger-card.sales .value { color: var(--currency-green); }
+.ledger-card.mismatch .value { color: var(--stamp-red); }
+.ledger-card.gst .value { color: var(--brass); }
+
+.stamp-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  transform: rotate(-8deg);
+  opacity: 0.55;
 }
 
-.App-link {
-  color: #61dafb;
+/* NL Query — notes strip */
+.notes-strip {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 4px;
+  padding: 24px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.notes-strip h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--brass);
+  margin: 0 0 16px;
+}
+
+.notes-strip input {
+  width: 100%;
+  max-width: 380px;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.notes-strip button {
+  margin-left: 10px;
+  padding: 10px 18px;
+  background: var(--brass);
+  color: var(--ink);
+  border: none;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notes-strip .answer {
+  margin-top: 16px;
+  line-height: 1.6;
+  font-size: 14px;
+  color: var(--paper);
+}
+
+@media (max-width: 640px) {
+  .ledger-cards { flex-direction: column; }
+  .notes-strip input { max-width: 100%; margin-bottom: 10px; }
 }
