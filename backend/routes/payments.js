@@ -6,8 +6,32 @@ const fs = require('fs');
 const { insertPayment } = require('../db/paymentsModel'); // yahan add karo
 
 const upload = multer({ dest: 'uploads/' });
-const { detectMismatches, getPaymentsSummary } = require('../db/reconciliationModel');
+const { detectMismatches, getPaymentsSummary, getDueInvoices } = require('../db/reconciliationModel');
 const { runReconciliation } = require('../services/reconciliationAgent');
+
+
+router.get('/dashboard', async (req, res) => {
+  try {
+    const businessId = 1;
+    const summary = await getPaymentsSummary(businessId);
+    const mismatches = await detectMismatches(businessId);
+    const dueInvoices = await getDueInvoices(businessId);
+
+    const totalSales = summary.reduce((sum, s) => sum + parseFloat(s.total), 0);
+
+    res.json({
+      totalSales,
+      paymentModes: summary,
+      pendingMismatches: mismatches.length,
+      mismatchDetails: mismatches,
+      gstDueCount: dueInvoices.length,
+      gstDueDetails: dueInvoices
+    });
+  } catch (err) {
+    console.error('Dashboard error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.get('/run-agent-reconcile', async (req, res) => {
   try {
@@ -15,6 +39,17 @@ router.get('/run-agent-reconcile', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Agent error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+const { runGstReminders } = require('../services/gstReminderAgent');
+
+router.get('/run-gst-reminders', async (req, res) => {
+  try {
+    const result = await runGstReminders(1);
+    res.json(result);
+  } catch (err) {
+    console.error('GST reminder error:', err);
     res.status(500).json({ error: err.message });
   }
 });

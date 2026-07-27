@@ -2,6 +2,9 @@
 import axios from 'axios';
 import { useState } from 'react';
 import './App.css';
+import Dashboard from './Dashboard';
+
+
 
 function App() {
   const [file, setFile] = useState(null);
@@ -26,8 +29,10 @@ function App() {
       setMessage('Error: ' + err.message);
     }
   };
+  
 
   return (
+    
     <div className="App" style={{ padding: '40px', fontFamily: 'sans-serif' }}>
       <h1>MSME Back-office — Payment Upload</h1>
 
@@ -41,6 +46,7 @@ function App() {
       </button>
 
       {message && <p>{message}</p>}
+       <Dashboard />  
     </div>
   );
 }

@@ -25,5 +25,16 @@ async function detectMismatches(businessId) {
   );
   return rows;
 }
+async function getDueInvoices(businessId) {
+  const [rows] = await pool.query(
+    `SELECT invoice_number, amount, gst_amount, due_date, status
+     FROM invoices
+     WHERE business_id = ? 
+     AND status IN ('pending', 'overdue')
+     AND due_date <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)`,
+    [businessId]
+  );
+  return rows;
+}
 
-module.exports = { getPaymentsSummary, detectMismatches };
+module.exports = { getPaymentsSummary, detectMismatches, getDueInvoices };
