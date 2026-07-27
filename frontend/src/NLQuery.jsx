@@ -11,7 +11,7 @@ function NLQuery() {
     setLoading(true);
     setAnswer('');
     try {
-      const res = await axios.post('http://localhost:5000/api/payments/nl-query', {
+      const res = await axios.post('https://msme-backoffice.onrender.com/api/payments/nl-query', {
         question
       });
       setAnswer(res.data.answer);

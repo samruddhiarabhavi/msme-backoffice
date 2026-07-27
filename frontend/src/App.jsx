@@ -22,7 +22,7 @@ function App() {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/payments/upload-csv',
+        'https://msme-backoffice.onrender.com/api/payments/upload-csv',
         formData
       );
       setMessage(res.data.message);

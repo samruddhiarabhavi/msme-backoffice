@@ -6,7 +6,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/payments/dashboard')
+    axios.get('https://msme-backoffice.onrender.com/api/payments/dashboard')
       .then((res) => {
         setData(res.data);
         setLoading(false);
