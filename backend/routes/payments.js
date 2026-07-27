@@ -8,6 +8,18 @@ const { insertPayment } = require('../db/paymentsModel'); // yahan add karo
 const upload = multer({ dest: 'uploads/' });
 const { detectMismatches, getPaymentsSummary, getDueInvoices } = require('../db/reconciliationModel');
 const { runReconciliation } = require('../services/reconciliationAgent');
+const { runNLQuery } = require('../services/nlQueryAgent');
+
+router.post('/nl-query', express.json(), async (req, res) => {
+  try {
+    const { question } = req.body;
+    const result = await runNLQuery(1, question);
+    res.json(result);
+  } catch (err) {
+    console.error('NL query error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 
 router.get('/dashboard', async (req, res) => {

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import './App.css';
 import Dashboard from './Dashboard';
+import NLQuery from './NLQuery';
 
 
 
@@ -47,6 +48,7 @@ function App() {
 
       {message && <p>{message}</p>}
        <Dashboard />  
+       <NLQuery/>
     </div>
   );
 }
