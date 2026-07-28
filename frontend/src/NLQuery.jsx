@@ -22,22 +22,19 @@ function NLQuery() {
   };
 
   return (
-    <div style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '20px', margin: '10px' }}>
-      <h3>Ask your back-office</h3>
-      <input
-        type="text"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        placeholder="e.g. How much cash did I collect?"
-        style={{ width: '300px', padding: '8px' }}
-        onKeyDown={(e) => e.key === 'Enter' && handleAsk()}
-      />
-      <button onClick={handleAsk} style={{ marginLeft: '10px', padding: '8px 16px' }}>
-        {loading ? 'Thinking...' : 'Ask'}
-      </button>
-      {answer && <p style={{ marginTop: '15px' }}>{answer}</p>}
-    </div>
-  );
+  <div className="notes-strip">
+    <h3>Ask your back-office</h3>
+    <input
+      type="text"
+      value={question}
+      onChange={(e) => setQuestion(e.target.value)}
+      placeholder="e.g. How much cash did I collect?"
+      onKeyDown={(e) => e.key === 'Enter' && handleAsk()}
+    />
+    <button onClick={handleAsk}>{loading ? 'Thinking...' : 'Ask'}</button>
+    {answer && <p className="answer">{answer}</p>}
+  </div>
+);
 }
 
 export default NLQuery;
