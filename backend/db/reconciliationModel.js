@@ -1,6 +1,4 @@
-
 const pool = require('./connection');
-
 
 async function getPaymentsSummary(businessId) {
   const [rows] = await pool.query(
@@ -25,6 +23,7 @@ async function detectMismatches(businessId) {
   );
   return rows;
 }
+
 async function getDueInvoices(businessId) {
   const [rows] = await pool.query(
     `SELECT invoice_number, amount, gst_amount, due_date, status
@@ -37,4 +36,32 @@ async function getDueInvoices(businessId) {
   return rows;
 }
 
-module.exports = { getPaymentsSummary, detectMismatches, getDueInvoices };
+async function detectAnomalies(businessId) {
+  // Duplicate reference IDs
+  const [duplicates] = await pool.query(
+    `SELECT reference_id, COUNT(*) as count, SUM(amount) as total_amount
+     FROM payments
+     WHERE business_id = ? AND reference_id IS NOT NULL AND reference_id != ''
+     GROUP BY reference_id
+     HAVING COUNT(*) > 1`,
+    [businessId]
+  );
+
+  // Unusually large transactions (2x se zyada average se)
+  const [avgResult] = await pool.query(
+    `SELECT AVG(amount) as avg_amount FROM payments WHERE business_id = ?`,
+    [businessId]
+  );
+  const avgAmount = avgResult[0].avg_amount || 0;
+
+  const [largeTxns] = await pool.query(
+    `SELECT id, amount, mode, reference_id, payment_date
+     FROM payments
+     WHERE business_id = ? AND amount > ?`,
+    [businessId, avgAmount * 2]
+  );
+
+  return { duplicates, largeTxns, avgAmount };
+}
+
+module.exports = { getPaymentsSummary, detectMismatches, getDueInvoices, detectAnomalies };

@@ -11,6 +11,17 @@ const { runReconciliation } = require('../services/reconciliationAgent');
 const { runNLQuery } = require('../services/nlQueryAgent');
 const { generateInvoicePDF } = require('../services/invoicePdfGenerator');
 const pool = require('../db/connection');
+const { runAnomalyCheck } = require('../services/anomalyAgent');
+
+router.get('/check-anomalies', async (req, res) => {
+  try {
+    const result = await runAnomalyCheck(1);
+    res.json(result);
+  } catch (err) {
+    console.error('Anomaly check error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.get('/invoice/:invoiceNumber/pdf', async (req, res) => {
   try {
