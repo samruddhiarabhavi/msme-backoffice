@@ -24,7 +24,14 @@ async function runGstReminders(businessId) {
 
   const planPrompt = `Given these due/overdue invoices for a small Indian business:
 ${JSON.stringify(dueInvoices)}
-Generate a friendly but firm GST/payment reminder message for each invoice, suitable for sending via SMS or WhatsApp. Keep each message under 3 lines. Use ₹ for amounts.`;
+Generate a friendly but firm GST/payment reminder message for each invoice, suitable for sending via SMS or WhatsApp. Keep each message under 3 lines. Use ₹ for amounts.
+
+For each invoice, provide the message in BOTH English and Hindi (Devanagari script), clearly labeled like this:
+
+**Invoice #XXX**
+English: <message>
+Hindi: <message>
+`;
   const reminders = await callGeminiAPI(planPrompt);
 
   return { dueInvoices, reminders };

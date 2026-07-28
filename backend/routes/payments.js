@@ -9,6 +9,21 @@ const upload = multer({ dest: 'uploads/' });
 const { detectMismatches, getPaymentsSummary, getDueInvoices } = require('../db/reconciliationModel');
 const { runReconciliation } = require('../services/reconciliationAgent');
 const { runNLQuery } = require('../services/nlQueryAgent');
+const { generateInvoicePDF } = require('../services/invoicePdfGenerator');
+const pool = require('../db/connection');
+
+router.get('/invoice/:invoiceNumber/pdf', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      'SELECT * FROM invoices WHERE invoice_number = ?',
+      [req.params.invoiceNumber]
+    );
+    if (rows.length === 0) return res.status(404).json({ error: 'Invoice not found' });
+    generateInvoicePDF(rows[0], res);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.post('/nl-query', express.json(), async (req, res) => {
   try {
